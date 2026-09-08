@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Majja Nanbargal - Ultimate Quiz Challenge!</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1e053a, #530a6b, #11001c);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #ff007f;
+            text-shadow: 0 0 10px #ff007f;
+        }
+
+        .question-box {
+            margin-bottom: 25px;
+        }
+
+        .question-title {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        @media (max-width: 480px) {
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .btn {
+            background: #2a0845;
+            color: white;
+            border: 2px solid #642b73;
+            padding: 15px 20px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #ff007f;
+            border-color: #ff007f;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 0, 127, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .audio-status {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #00ffff;
+            display: none;
+            font-style: italic;
+        }
+
+        .alert-box {
+            margin-top: 15px;
+            padding: 10px;
+            background: rgba(255, 0, 0, 0.3);
+            border: 1px solid red;
+            border-radius: 8px;
+            color: #ffcccc;
+            display: none;
+        }
+
+        .intro-screen, .grand-reveal {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .countdown {
+            font-size: 4rem;
+            font-weight: bold;
+            color: #ff007f;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .song-title {
+            font-size: 1.5rem;
+            color: #00ffff;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- INTRO SCREEN -->
+    <div id="intro-screen" class="intro-screen">
+        <h1>🔥 Majja Nanbargal Prank Challenge 🔥</h1>
+        <p>Answer all questions correctly to unlock the ultimate legendary audio track!</p>
+        <button class="btn" onclick="startQuiz()">Start Challenge</button>
+    </div>
+
+    <!-- QUIZ SCREEN -->
+    <div id="quiz-screen" class="hidden">
+        <h1 id="question-number">Question 1</h1>
+        <div class="question-box">
+            <div id="question-text" class="question-title">Question goes here</div>
+            <div id="options-container" class="options-grid"></div>
+        </div>
+        <div id="alert-box" class="alert-box"></div>
+        <div id="audio-status" class="audio-status">🔊 Playing response audio... Please wait till it finishes to move to the next question!</div>
+    </div>
+
+    <!-- REVEAL SCREEN -->
+    <div id="reveal-screen" class="hidden grand-reveal">
+        <h1>🎉 Challenge Completed! 🎉</h1>
+        <p>Okayyyyy you gottt all correct ready to witness the greatesttt...</p>
+        <p>Are you readdyyy?</p>
+        <div id="countdown" class="countdown">3</div>
+        <div id="reveal-text" class="hidden">
+            <h2>One of the finest singers in this generation...</h2>
+            <h3>Generational talent from Chennai to the World!</h3>
+            <h1 style="font-size: 2.5rem; color: #00ffff; margin-top: 15px;">INTRODUCING LEGEND JABESHHH !! 🎤⚡</h1>
+            <p class="song-title">🎵 Song: Radhimaa 🎵</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Quiz Questions Data
+    const questions = [
+        {
+            question: "Who is the best singer in the entire world?",
+            options: ["AR Rahman", "Sai Abhyankkar", "Sid Sriram", "Legend Jabesh"],
+            answer: "Legend Jabesh",
+            audio: "https://jaison.itsjabesh.com/legend_jabesh.mp3"
+        },
+        {
+            question: "What name Jhana Varshan Loves the Mostt?",
+            options: ["Gopika", "Deepika", "Vamsika", "Madhavan"],
+            answer: "Madhavan",
+            audio: "https://jaison.itsjabesh.com/jhana.mp3"
+        },
+        {
+            question: "Who respects girls the most!",
+            options: ["Jhana Varshan", "Hrithick", "Hitesh", "Rald Mama"],
+            answer: "Rald Mama",
+            audio: "https://jaison.itsjabesh.com/heraled.mp3"
+        },
+        {
+            question: "Who dressed up at the night and comes college in the morning?",
+            options: ["Vijay", "Ajith", "Surya", "Hrithick"],
+            answer: "Hrithick",
+            audio: "https://jaison.itsjabesh.com/hrithick.mp3"
+        },
+        {
+            question: "Who has the best physique?",
+            options: ["Arnold", "Ronnie Coleman", "David Laid", "Hitesh Mama"],
+            answer: "Hitesh Mama",
+            audio: "https://jaison.itsjabesh.com/hitesh.mp3"
+        },
+        {
+            question: "Who shares water the most?",
+            options: ["Nivedha", "Ushra", "Harishmita", "Jeyesh Palani Mama"],
+            answer: "Jeyesh Palani Mama",
+            audio: "https://jaison.itsjabesh.com/jeyesh.mp3"
+        }
+    ];
+
+    let currentQuestionIndex = 0;
+    const currentAudio = new Audio();
+
+    function startQuiz() {
+        document.getElementById("intro-screen").classList.add("hidden");
+        document.getElementById("quiz-screen").classList.remove("hidden");
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        const q = questions[currentQuestionIndex];
+        document.getElementById("question-number").innerText = `Question ${currentQuestionIndex + 1} of ${questions.length}`;
+        document.getElementById("question-text").innerText = q.question;
+        document.getElementById("alert-box").style.display = "none";
+        
+        const optionsContainer = document.getElementById("options-container");
+        optionsContainer.innerHTML = "";
+
+        q.options.forEach(option => {
+            const btn = document.createElement("button");
+            btn.className = "btn";
+            btn.innerText = option;
+            btn.onclick = () => handleAnswer(option);
+            optionsContainer.appendChild(btn);
+        });
+    }
+
+    function handleAnswer(selectedOption) {
+        const q = questions[currentQuestionIndex];
+        const buttons = document.querySelectorAll("#options-container .btn");
+        
+        // Disable all buttons during audio play
+        buttons.forEach(btn => btn.disabled = true);
+
+        const alertBox = document.getElementById("alert-box");
+        
+        if (selectedOption !== q.answer) {
+            alertBox.innerText = `Wrong Answer! The correct answer is: "${q.answer}". Playing audio before proceeding!`;
+            alertBox.style.display = "block";
+        }
+
+        // Play the mandatory audio for the question
+        playAudio(q.audio, () => {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                startGrandReveal();
+            }
+        });
+    }
+
+    function playAudio(src, onEndedCallback) {
+        document.getElementById("audio-status").style.display = "block";
+        currentAudio.src = src;
+        currentAudio.play().catch(err => {
+            console.log("Audio play error:", err);
+            // Fallback if browser blocks autoplay
+            onEndedCallback();
+        });
+
+        currentAudio.onended = () => {
+            document.getElementById("audio-status").style.display = "none";
+            onEndedCallback();
+        };
+    }
+
+    function startGrandReveal() {
+        document.getElementById("quiz-screen").classList.add("hidden");
+        document.getElementById("reveal-screen").classList.remove("hidden");
+
+        let count = 3;
+        const countdownEl = document.getElementById("countdown");
+        
+        // Entry music prelude optional start
+        const entryAudio = new Audio("https://jaison.itsjabesh.com/jabesh_entry.mp3");
+        entryAudio.play().catch(e => console.log(e));
+
+        const timer = setInterval(() => {
+            count--;
+            if (count > 0) {
+                countdownEl.innerText = count;
+            } else {
+                clearInterval(timer);
+                countdownEl.classList.add("hidden");
+                document.getElementById("reveal-text").classList.remove("hidden");
+                
+                // Play final songs automatically sequence
+                entryAudio.onended = () => {
+                    const finalSong = new Audio("https://jaison.itsjabesh.com/radhima.mp3");
+                    finalSong.play();
+                };
+            }
+        }, 1000);
+    }
+</script>
+
+</body>
+</html>
