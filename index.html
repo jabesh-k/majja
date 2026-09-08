@@ -1,313 +1,507 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Majja Nanbargal - Ultimate Quiz Challenge!</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Legend Jabesh Challenge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep:#160a26;
+    --bg-mid:#2a1246;
+    --spot:#ffb703;
+    --neon:#ff2e88;
+    --neon-soft:#ff6fb0;
+    --ok:#3ee08b;
+    --ink:#f4eefc;
+    --ink-dim:#c9b8e6;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    min-height:100vh;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% -10%, rgba(255,183,3,0.18), transparent 60%),
+      radial-gradient(ellipse 60% 50% at 85% 100%, rgba(255,46,136,0.18), transparent 60%),
+      linear-gradient(180deg, var(--bg-deep), var(--bg-mid));
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    overflow-x:hidden;
+  }
+  .stage{
+    width:100%;
+    max-width:560px;
+    text-align:center;
+  }
+  h1.title{
+    font-family:'Bungee', cursive;
+    font-size:clamp(28px, 6vw, 42px);
+    letter-spacing:0.5px;
+    line-height:1.15;
+    margin:0 0 6px;
+    color:var(--spot);
+    text-shadow:0 0 18px rgba(255,183,3,0.45);
+  }
+  .subtitle{
+    color:var(--ink-dim);
+    font-size:15px;
+    margin:0 0 32px;
+  }
+  .card{
+    background:rgba(255,255,255,0.04);
+    border:1px solid rgba(255,255,255,0.09);
+    border-radius:20px;
+    padding:32px 24px;
+    backdrop-filter:blur(6px);
+    box-shadow:0 20px 60px rgba(0,0,0,0.4);
+  }
+  .progress{
+    display:flex;
+    justify-content:center;
+    gap:8px;
+    margin-bottom:28px;
+  }
+  .dot{
+    width:10px;height:10px;border-radius:50%;
+    background:rgba(255,255,255,0.15);
+    transition:all .3s ease;
+  }
+  .dot.done{background:var(--ok);box-shadow:0 0 8px rgba(62,224,139,0.7);}
+  .dot.active{background:var(--spot);box-shadow:0 0 10px rgba(255,183,3,0.8);transform:scale(1.3);}
 
-        body {
-            background: linear-gradient(135deg, #1e053a, #530a6b, #11001c);
-            color: #ffffff;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 20px;
-        }
+  .qnum{
+    font-size:13px;
+    color:var(--neon-soft);
+    font-weight:800;
+    letter-spacing:1px;
+    margin-bottom:10px;
+  }
+  .question{
+    font-size:clamp(19px,4vw,23px);
+    font-weight:800;
+    margin:0 0 24px;
+    line-height:1.35;
+  }
+  .options{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+  }
+  @media (max-width:420px){
+    .options{grid-template-columns:1fr;}
+  }
+  .opt{
+    background:rgba(255,255,255,0.06);
+    border:1.5px solid rgba(255,255,255,0.14);
+    color:var(--ink);
+    padding:14px 12px;
+    border-radius:12px;
+    font-size:15px;
+    font-weight:600;
+    font-family:inherit;
+    cursor:pointer;
+    transition:transform .15s ease, background .2s ease, border-color .2s ease;
+  }
+  .opt:hover{
+    transform:translateY(-2px);
+    background:rgba(255,255,255,0.1);
+    border-color:var(--neon-soft);
+  }
+  .opt:disabled{cursor:default;}
+  .opt.wrong{
+    background:rgba(255,46,136,0.18);
+    border-color:var(--neon);
+    animation:shake .4s ease;
+  }
+  .opt.correct-glow{
+    border-color:var(--ok);
+    box-shadow:0 0 0 rgba(62,224,139,0.6);
+    animation:pulse 1s ease-in-out infinite;
+  }
+  .opt.correct-hit{
+    background:rgba(62,224,139,0.22);
+    border-color:var(--ok);
+  }
+  @keyframes shake{
+    0%,100%{transform:translateX(0);}
+    25%{transform:translateX(-6px);}
+    75%{transform:translateX(6px);}
+  }
+  @keyframes pulse{
+    0%,100%{box-shadow:0 0 0 rgba(62,224,139,0.5);}
+    50%{box-shadow:0 0 18px rgba(62,224,139,0.9);}
+  }
+  .feedback{
+    min-height:22px;
+    margin-top:16px;
+    font-size:14px;
+    font-weight:600;
+  }
+  .feedback.wrong-text{color:var(--neon-soft);}
+  .feedback.playing-text{color:var(--spot);}
 
-        .container {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            padding: 30px;
-            max-width: 600px;
-            width: 100%;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-        }
+  .audio-row{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    margin-top:18px;
+    color:var(--ink-dim);
+    font-size:13px;
+  }
+  .bars{
+    display:flex;
+    align-items:flex-end;
+    gap:3px;
+    height:16px;
+  }
+  .bars span{
+    width:3px;
+    background:var(--spot);
+    border-radius:2px;
+    animation:bar 0.9s ease-in-out infinite;
+  }
+  .bars span:nth-child(1){height:6px;animation-delay:0s;}
+  .bars span:nth-child(2){height:14px;animation-delay:0.15s;}
+  .bars span:nth-child(3){height:9px;animation-delay:0.3s;}
+  .bars span:nth-child(4){height:16px;animation-delay:0.45s;}
+  @keyframes bar{
+    0%,100%{transform:scaleY(0.4);}
+    50%{transform:scaleY(1);}
+  }
+  .hidden{display:none !important;}
 
-        h1 {
-            font-size: 2rem;
-            margin-bottom: 20px;
-            color: #ff007f;
-            text-shadow: 0 0 10px #ff007f;
-        }
+  /* Intro */
+  .intro-emoji{font-size:48px;margin-bottom:12px;}
+  .btn-main{
+    margin-top:24px;
+    background:linear-gradient(135deg, var(--neon), #ff8a3d);
+    color:#1a0a10;
+    border:none;
+    padding:14px 32px;
+    border-radius:999px;
+    font-family:'Bungee', cursive;
+    font-size:16px;
+    letter-spacing:0.5px;
+    cursor:pointer;
+    box-shadow:0 8px 24px rgba(255,46,136,0.35);
+    transition:transform .15s ease;
+  }
+  .btn-main:hover{transform:translateY(-2px) scale(1.02);}
 
-        .question-box {
-            margin-bottom: 25px;
-        }
+  /* Countdown */
+  .countdown-num{
+    font-family:'Bungee', cursive;
+    font-size:96px;
+    color:var(--spot);
+    text-shadow:0 0 30px rgba(255,183,3,0.6);
+  }
 
-        .question-title {
-            font-size: 1.3rem;
-            margin-bottom: 20px;
-        }
+  /* Reveal */
+  .reveal-tag{
+    color:var(--neon-soft);
+    font-weight:800;
+    font-size:14px;
+    letter-spacing:1px;
+    margin-bottom:8px;
+  }
+  .reveal-name{
+    font-family:'Bungee', cursive;
+    font-size:clamp(34px,8vw,54px);
+    color:var(--spot);
+    text-shadow:0 0 24px rgba(255,183,3,0.6);
+    margin:6px 0 4px;
+  }
+  .reveal-sub{
+    color:var(--ink-dim);
+    font-size:14px;
+    margin-bottom:22px;
+  }
+  .mic{font-size:44px;margin-bottom:6px;}
 
-        .options-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
+  .final-card{
+    padding-top:36px;
+    padding-bottom:36px;
+  }
+  .credits{
+    margin-top:28px;
+    font-size:12px;
+    color:var(--ink-dim);
+    opacity:0.75;
+  }
 
-        @media (max-width: 480px) {
-            .options-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .btn {
-            background: #2a0845;
-            color: white;
-            border: 2px solid #642b73;
-            padding: 15px 20px;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn:hover {
-            background: #ff007f;
-            border-color: #ff007f;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(255, 0, 127, 0.4);
-        }
-
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .audio-status {
-            margin-top: 20px;
-            font-size: 0.9rem;
-            color: #00ffff;
-            display: none;
-            font-style: italic;
-        }
-
-        .alert-box {
-            margin-top: 15px;
-            padding: 10px;
-            background: rgba(255, 0, 0, 0.3);
-            border: 1px solid red;
-            border-radius: 8px;
-            color: #ffcccc;
-            display: none;
-        }
-
-        .intro-screen, .grand-reveal {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .countdown {
-            font-size: 4rem;
-            font-weight: bold;
-            color: #ff007f;
-            animation: pulse 1s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        .song-title {
-            font-size: 1.5rem;
-            color: #00ffff;
-            margin-top: 10px;
-        }
-    </style>
+  .confetti{
+    position:fixed;
+    top:-10px;
+    width:8px;height:14px;
+    opacity:0.9;
+    animation:fall linear forwards;
+    z-index:5;
+  }
+  @keyframes fall{
+    to{transform:translateY(110vh) rotate(360deg);}
+  }
+</style>
 </head>
 <body>
 
-<div class="container">
-    <!-- INTRO SCREEN -->
-    <div id="intro-screen" class="intro-screen">
-        <h1>🔥 Majja Nanbargal Prank Challenge 🔥</h1>
-        <p>Answer all questions correctly to unlock the ultimate legendary audio track!</p>
-        <button class="btn" onclick="startQuiz()">Start Challenge</button>
-    </div>
+<div class="stage">
 
-    <!-- QUIZ SCREEN -->
-    <div id="quiz-screen" class="hidden">
-        <h1 id="question-number">Question 1</h1>
-        <div class="question-box">
-            <div id="question-text" class="question-title">Question goes here</div>
-            <div id="options-container" class="options-grid"></div>
-        </div>
-        <div id="alert-box" class="alert-box"></div>
-        <div id="audio-status" class="audio-status">🔊 Playing response audio... Please wait till it finishes to move to the next question!</div>
+  <!-- INTRO SCREEN -->
+  <div id="screen-intro">
+    <h1 class="title">🎤 THE ULTIMATE CHALLENGE 🎤</h1>
+    <p class="subtitle">6 questions stand between you and greatness. Answer them all... if you dare.</p>
+    <div class="card">
+      <div class="intro-emoji">🏆</div>
+      <div class="question">Complete every challenge to unlock something legendary.</div>
+      <button class="btn-main" onclick="startQuiz()">START</button>
     </div>
+  </div>
 
-    <!-- REVEAL SCREEN -->
-    <div id="reveal-screen" class="hidden grand-reveal">
-        <h1>🎉 Challenge Completed! 🎉</h1>
-        <p>Okayyyyy you gottt all correct ready to witness the greatesttt...</p>
-        <p>Are you readdyyy?</p>
-        <div id="countdown" class="countdown">3</div>
-        <div id="reveal-text" class="hidden">
-            <h2>One of the finest singers in this generation...</h2>
-            <h3>Generational talent from Chennai to the World!</h3>
-            <h1 style="font-size: 2.5rem; color: #00ffff; margin-top: 15px;">INTRODUCING LEGEND JABESHHH !! 🎤⚡</h1>
-            <p class="song-title">🎵 Song: Radhimaa 🎵</p>
-        </div>
+  <!-- QUIZ SCREEN -->
+  <div id="screen-quiz" class="hidden">
+    <h1 class="title">🎤 THE ULTIMATE CHALLENGE 🎤</h1>
+    <div class="card">
+      <div class="progress" id="progress"></div>
+      <div class="qnum" id="qnum">QUESTION 1 / 6</div>
+      <div class="question" id="qtext"></div>
+      <div class="options" id="options"></div>
+      <div class="feedback" id="feedback"></div>
+      <div class="audio-row hidden" id="audioRow">
+        <div class="bars"><span></span><span></span><span></span><span></span></div>
+        <span>playing audio, hang tight...</span>
+      </div>
     </div>
+  </div>
+
+  <!-- COUNTDOWN SCREEN -->
+  <div id="screen-countdown" class="hidden">
+    <div class="card">
+      <div class="question">Okayyyy you got all correct 🔥<br>Ready to witness the greatest?</div>
+      <div class="countdown-num" id="countNum">3</div>
+    </div>
+  </div>
+
+  <!-- REVEAL SCREEN -->
+  <div id="screen-reveal" class="hidden">
+    <div class="card final-card">
+      <div class="mic">🎙️</div>
+      <div class="reveal-tag">GENERATIONAL TALENT · CHENNAI TO THE WORLD</div>
+      <div class="reveal-name">LEGEND JABESH</div>
+      <div class="reveal-sub" id="revealStatus">entering the stage...</div>
+      <div class="audio-row" id="revealAudioRow">
+        <div class="bars"><span></span><span></span><span></span><span></span></div>
+        <span id="revealAudioLabel">playing entry...</span>
+      </div>
+      <div class="credits">🎉 majja nanbargal — six members strong 🎉</div>
+    </div>
+  </div>
+
 </div>
 
+<audio id="player"></audio>
+
 <script>
-    // Quiz Questions Data
-    const questions = [
-        {
-            question: "Who is the best singer in the entire world?",
-            options: ["AR Rahman", "Sai Abhyankkar", "Sid Sriram", "Legend Jabesh"],
-            answer: "Legend Jabesh",
-            audio: "https://jaison.itsjabesh.com/legend_jabesh.mp3"
-        },
-        {
-            question: "What name Jhana Varshan Loves the Mostt?",
-            options: ["Gopika", "Deepika", "Vamsika", "Madhavan"],
-            answer: "Madhavan",
-            audio: "https://jaison.itsjabesh.com/jhana.mp3"
-        },
-        {
-            question: "Who respects girls the most!",
-            options: ["Jhana Varshan", "Hrithick", "Hitesh", "Rald Mama"],
-            answer: "Rald Mama",
-            audio: "https://jaison.itsjabesh.com/heraled.mp3"
-        },
-        {
-            question: "Who dressed up at the night and comes college in the morning?",
-            options: ["Vijay", "Ajith", "Surya", "Hrithick"],
-            answer: "Hrithick",
-            audio: "https://jaison.itsjabesh.com/hrithick.mp3"
-        },
-        {
-            question: "Who has the best physique?",
-            options: ["Arnold", "Ronnie Coleman", "David Laid", "Hitesh Mama"],
-            answer: "Hitesh Mama",
-            audio: "https://jaison.itsjabesh.com/hitesh.mp3"
-        },
-        {
-            question: "Who shares water the most?",
-            options: ["Nivedha", "Ushra", "Harishmita", "Jeyesh Palani Mama"],
-            answer: "Jeyesh Palani Mama",
-            audio: "https://jaison.itsjabesh.com/jeyesh.mp3"
-        }
-    ];
+const questions = [
+  {
+    q: "Who is the best singer in the entire world?",
+    options: ["AR Rahman", "Sai Abhyankkar", "Sid Sriram", "Legend Jabesh"],
+    correct: 3,
+    audio: "https://jaison.itsjabesh.com/legend_jabesh.mp3"
+  },
+  {
+    q: "What name does Jhana Varshan love the most?",
+    options: ["Gopika", "Deepika", "Vamsika", "Madhavan"],
+    correct: 3,
+    audio: "https://jaison.itsjabesh.com/jhana.mp3"
+  },
+  {
+    q: "Who respects girls the most?",
+    options: ["Jhana Varshan", "Hrithick", "Hitesh", "Rald Mama"],
+    correct: 3,
+    audio: "https://jaison.itsjabesh.com/heraled.mp3"
+  },
+  {
+    q: "Who dresses up at night and comes to college in the morning?",
+    options: ["Vijay", "Ajith", "Surya", "Hrithick"],
+    correct: 3,
+    audio: "https://jaison.itsjabesh.com/hrithick.mp3"
+  },
+  {
+    q: "Who has the best physique?",
+    options: ["Arnold", "Ronnie Coleman", "David Laid", "Hitesh Mama"],
+    correct: 3,
+    audio: "https://jaison.itsjabesh.com/hitesh.mp3"
+  },
+  {
+    q: "Who shares water the most?",
+    options: ["Nivedha", "Ushra", "Harishmita", "Jeyesh Palani Mama"],
+    correct: 3,
+    audio: "https://jaison.itsjabesh.com/jeyesh.mp3"
+  }
+];
 
-    let currentQuestionIndex = 0;
-    const currentAudio = new Audio();
+const ENTRY_AUDIO = "https://jaison.itsjabesh.com/jabesh_entry.mp3";
+const FINAL_SONG = "https://jaison.itsjabesh.com/radhima.mp3";
 
-    function startQuiz() {
-        document.getElementById("intro-screen").classList.add("hidden");
-        document.getElementById("quiz-screen").classList.remove("hidden");
-        loadQuestion();
+let current = 0;
+let locked = false;
+const player = document.getElementById('player');
+
+function startQuiz(){
+  document.getElementById('screen-intro').classList.add('hidden');
+  document.getElementById('screen-quiz').classList.remove('hidden');
+  buildProgress();
+  renderQuestion();
+}
+
+function buildProgress(){
+  const wrap = document.getElementById('progress');
+  wrap.innerHTML = '';
+  for(let i=0;i<questions.length;i++){
+    const d = document.createElement('div');
+    d.className = 'dot';
+    d.id = 'dot'+i;
+    wrap.appendChild(d);
+  }
+}
+
+function updateProgress(){
+  for(let i=0;i<questions.length;i++){
+    const d = document.getElementById('dot'+i);
+    d.className = 'dot' + (i<current ? ' done' : i===current ? ' active' : '');
+  }
+}
+
+function renderQuestion(){
+  locked = false;
+  updateProgress();
+  const item = questions[current];
+  document.getElementById('qnum').textContent = `QUESTION ${current+1} / ${questions.length}`;
+  document.getElementById('qtext').textContent = item.q;
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('feedback').className = 'feedback';
+  document.getElementById('audioRow').classList.add('hidden');
+
+  const optWrap = document.getElementById('options');
+  optWrap.innerHTML = '';
+  item.options.forEach((opt, idx) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt';
+    btn.textContent = opt;
+    btn.onclick = () => handleAnswer(idx, btn);
+    optWrap.appendChild(btn);
+  });
+}
+
+function handleAnswer(idx, btn){
+  if(locked) return;
+  const item = questions[current];
+
+  if(idx === item.correct){
+    locked = true;
+    btn.classList.add('correct-hit');
+    document.querySelectorAll('.opt').forEach(b => b.disabled = true);
+    const fb = document.getElementById('feedback');
+    fb.textContent = "Correct! 🎉";
+    fb.className = 'feedback playing-text';
+    document.getElementById('audioRow').classList.remove('hidden');
+    playAudioThenAdvance(item.audio);
+  } else {
+    btn.classList.add('wrong');
+    btn.disabled = true;
+    const fb = document.getElementById('feedback');
+    fb.textContent = "Nope, that's not it — try the glowing one 👀";
+    fb.className = 'feedback wrong-text';
+    // glow the correct one so they can proceed
+    const allOpts = document.querySelectorAll('.opt');
+    allOpts[item.correct].classList.add('correct-glow');
+  }
+}
+
+function playAudioThenAdvance(src){
+  player.pause();
+  player.src = src;
+  player.currentTime = 0;
+  player.play().catch(()=>{});
+  player.onended = () => {
+    document.getElementById('audioRow').classList.add('hidden');
+    current++;
+    if(current < questions.length){
+      renderQuestion();
+    } else {
+      finishQuiz();
     }
+  };
+}
 
-    function loadQuestion() {
-        const q = questions[currentQuestionIndex];
-        document.getElementById("question-number").innerText = `Question ${currentQuestionIndex + 1} of ${questions.length}`;
-        document.getElementById("question-text").innerText = q.question;
-        document.getElementById("alert-box").style.display = "none";
-        
-        const optionsContainer = document.getElementById("options-container");
-        optionsContainer.innerHTML = "";
+function finishQuiz(){
+  updateProgress();
+  document.getElementById('screen-quiz').classList.add('hidden');
+  document.getElementById('screen-countdown').classList.remove('hidden');
+  runCountdown();
+}
 
-        q.options.forEach(option => {
-            const btn = document.createElement("button");
-            btn.className = "btn";
-            btn.innerText = option;
-            btn.onclick = () => handleAnswer(option);
-            optionsContainer.appendChild(btn);
-        });
+function runCountdown(){
+  const seq = ["3","2","1","🎤"];
+  let i = 0;
+  const el = document.getElementById('countNum');
+  el.textContent = seq[i];
+  const timer = setInterval(() => {
+    i++;
+    if(i < seq.length){
+      el.textContent = seq[i];
+    } else {
+      clearInterval(timer);
+      showReveal();
     }
+  }, 900);
+}
 
-    function handleAnswer(selectedOption) {
-        const q = questions[currentQuestionIndex];
-        const buttons = document.querySelectorAll("#options-container .btn");
-        
-        // Disable all buttons during audio play
-        buttons.forEach(btn => btn.disabled = true);
+function showReveal(){
+  document.getElementById('screen-countdown').classList.add('hidden');
+  document.getElementById('screen-reveal').classList.remove('hidden');
+  launchConfetti();
 
-        const alertBox = document.getElementById("alert-box");
-        
-        if (selectedOption !== q.answer) {
-            alertBox.innerText = `Wrong Answer! The correct answer is: "${q.answer}". Playing audio before proceeding!`;
-            alertBox.style.display = "block";
-        }
+  const status = document.getElementById('revealStatus');
+  const label = document.getElementById('revealAudioLabel');
+  status.textContent = "entering the stage...";
+  label.textContent = "playing entry...";
 
-        // Play the mandatory audio for the question
-        playAudio(q.audio, () => {
-            currentQuestionIndex++;
-            if (currentQuestionIndex < questions.length) {
-                loadQuestion();
-            } else {
-                startGrandReveal();
-            }
-        });
-    }
+  player.pause();
+  player.src = ENTRY_AUDIO;
+  player.currentTime = 0;
+  player.play().catch(()=>{});
+  player.onended = () => {
+    status.textContent = "and now, the full performance 🎶";
+    label.textContent = "now playing: Radhimaa";
+    player.src = FINAL_SONG;
+    player.currentTime = 0;
+    player.play().catch(()=>{});
+    player.onended = () => {
+      label.textContent = "hope you enjoyed the show 🙏";
+    };
+  };
+}
 
-    function playAudio(src, onEndedCallback) {
-        document.getElementById("audio-status").style.display = "block";
-        currentAudio.src = src;
-        currentAudio.play().catch(err => {
-            console.log("Audio play error:", err);
-            // Fallback if browser blocks autoplay
-            onEndedCallback();
-        });
-
-        currentAudio.onended = () => {
-            document.getElementById("audio-status").style.display = "none";
-            onEndedCallback();
-        };
-    }
-
-    function startGrandReveal() {
-        document.getElementById("quiz-screen").classList.add("hidden");
-        document.getElementById("reveal-screen").classList.remove("hidden");
-
-        let count = 3;
-        const countdownEl = document.getElementById("countdown");
-        
-        // Entry music prelude optional start
-        const entryAudio = new Audio("https://jaison.itsjabesh.com/jabesh_entry.mp3");
-        entryAudio.play().catch(e => console.log(e));
-
-        const timer = setInterval(() => {
-            count--;
-            if (count > 0) {
-                countdownEl.innerText = count;
-            } else {
-                clearInterval(timer);
-                countdownEl.classList.add("hidden");
-                document.getElementById("reveal-text").classList.remove("hidden");
-                
-                // Play final songs automatically sequence
-                entryAudio.onended = () => {
-                    const finalSong = new Audio("https://jaison.itsjabesh.com/radhima.mp3");
-                    finalSong.play();
-                };
-            }
-        }, 1000);
-    }
+function launchConfetti(){
+  const colors = ['#ffb703','#ff2e88','#3ee08b','#ff8a3d','#f4eefc'];
+  for(let i=0;i<60;i++){
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    c.style.left = Math.random()*100 + 'vw';
+    c.style.background = colors[Math.floor(Math.random()*colors.length)];
+    c.style.animationDuration = (2.5 + Math.random()*2) + 's';
+    c.style.animationDelay = (Math.random()*1.5) + 's';
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(), 5000);
+  }
+}
 </script>
 
 </body>
