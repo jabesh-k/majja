@@ -2,507 +2,217 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Legend Jabesh Challenge</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101018">
+<title>Legend Jabesh • Majja Nanbargal</title>
 <style>
-  :root{
-    --bg-deep:#160a26;
-    --bg-mid:#2a1246;
-    --spot:#ffb703;
-    --neon:#ff2e88;
-    --neon-soft:#ff6fb0;
-    --ok:#3ee08b;
-    --ink:#f4eefc;
-    --ink-dim:#c9b8e6;
-  }
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
-  body{
-    min-height:100vh;
-    background:
-      radial-gradient(ellipse 80% 60% at 50% -10%, rgba(255,183,3,0.18), transparent 60%),
-      radial-gradient(ellipse 60% 50% at 85% 100%, rgba(255,46,136,0.18), transparent 60%),
-      linear-gradient(180deg, var(--bg-deep), var(--bg-mid));
-    color:var(--ink);
-    font-family:'Inter', sans-serif;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:24px;
-    overflow-x:hidden;
-  }
-  .stage{
-    width:100%;
-    max-width:560px;
-    text-align:center;
-  }
-  h1.title{
-    font-family:'Bungee', cursive;
-    font-size:clamp(28px, 6vw, 42px);
-    letter-spacing:0.5px;
-    line-height:1.15;
-    margin:0 0 6px;
-    color:var(--spot);
-    text-shadow:0 0 18px rgba(255,183,3,0.45);
-  }
-  .subtitle{
-    color:var(--ink-dim);
-    font-size:15px;
-    margin:0 0 32px;
-  }
-  .card{
-    background:rgba(255,255,255,0.04);
-    border:1px solid rgba(255,255,255,0.09);
-    border-radius:20px;
-    padding:32px 24px;
-    backdrop-filter:blur(6px);
-    box-shadow:0 20px 60px rgba(0,0,0,0.4);
-  }
-  .progress{
-    display:flex;
-    justify-content:center;
-    gap:8px;
-    margin-bottom:28px;
-  }
-  .dot{
-    width:10px;height:10px;border-radius:50%;
-    background:rgba(255,255,255,0.15);
-    transition:all .3s ease;
-  }
-  .dot.done{background:var(--ok);box-shadow:0 0 8px rgba(62,224,139,0.7);}
-  .dot.active{background:var(--spot);box-shadow:0 0 10px rgba(255,183,3,0.8);transform:scale(1.3);}
+*{box-sizing:border-box}body{margin:0;background:#101018;color:#faf7ff;font:16px/1.5 system-ui,sans-serif;min-height:100svh;display:grid;place-items:center;padding:24px;background-image:radial-gradient(ellipse at top right,#51224580,transparent 60%)}
+main{width:min(100%,660px)}header{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:30px}.brand{font-weight:900;letter-spacing:.12em;font-size:14px}.tag{color:#d9ff76;border:1px solid #647536;border-radius:30px;padding:6px 12px;font-size:13px;white-space:nowrap}
+.rounds{display:flex;gap:8px;margin-bottom:24px}.round{flex:1;height:6px;border-radius:9px;background:#34333f}.active{background:#d9ff76}.card{background:#1c1b26;border:1px solid #3b3547;border-radius:26px;padding:clamp(22px,5vw,42px);box-shadow:0 25px 80px #0004}
+.eyebrow{color:#d9ff76;text-transform:uppercase;font-size:13px;letter-spacing:.13em;font-weight:800}h1{font-size:clamp(28px,5.8vw,42px);line-height:1.15;letter-spacing:-.035em;margin:18px 0 26px}p{color:#c6c1d0}button{font:inherit;cursor:pointer;border:0;touch-action:manipulation}button:focus-visible{outline:3px solid #ff91cf;outline-offset:4px}.options{display:grid;gap:12px}.option{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:#292633;color:#fff;border:1px solid #494151;border-radius:14px;padding:16px}.option:not(:disabled):hover{background:#393345;border-color:#d9ff76}.letter{display:grid;place-items:center;flex-shrink:0;width:30px;height:30px;background:#ffffff10;border-radius:8px;font-size:14px}.option.correct{background:#d9ff76;color:#172006;border-color:#d9ff76}.option.wrong{border-color:#ff8fa4;background:#562b38}.option:disabled{cursor:default}.option:disabled:not(.correct):not(.wrong){opacity:.5}
+.primary{background:#d9ff76;color:#172006;border-radius:12px;padding:15px 22px;font-weight:800;width:100%}.secondary{background:#383240;color:white;border-radius:10px;padding:12px 18px}.feedback{min-height:28px;margin:20px 0 10px;font-weight:700;color:#f5d6e8}.sound{border-top:1px solid #494151;padding-top:18px;margin-top:20px}.sound-top{display:flex;gap:12px;justify-content:space-between;align-items:center}.sound p{margin:0;font-size:14px}progress{width:100%;height:8px;accent-color:#d9ff76;margin:16px 0}.note{text-align:center;font-size:13px;color:#a9a1b6;margin-top:22px}.big{font-size:clamp(70px,18vw,130px);color:#d9ff76;text-align:center;margin:15px 0;line-height:1.15}.center{text-align:center}.bars{display:flex;justify-content:center;align-items:center;height:75px;gap:7px;margin:20px}.bars i{width:9px;height:22px;border-radius:5px;background:#ff91cf;animation:bounce .8s ease-in-out infinite alternate}.bars i:nth-child(2n){animation-delay:-.4s;background:#d9ff76}.bars i:nth-child(3n){animation-delay:-.65s}@keyframes bounce{to{height:65px}}.paused i{animation-play-state:paused}[hidden]{display:none!important}audio{width:100%;margin-top:16px}@media(prefers-reduced-motion:reduce){*{animation:none!important}}@media(max-width:400px){body{padding:14px}.tag{font-size:12px;padding:5px 8px}.brand{font-size:12px}}
 
-  .qnum{
-    font-size:13px;
-    color:var(--neon-soft);
-    font-weight:800;
-    letter-spacing:1px;
-    margin-bottom:10px;
-  }
-  .question{
-    font-size:clamp(19px,4vw,23px);
-    font-weight:800;
-    margin:0 0 24px;
-    line-height:1.35;
-  }
-  .options{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:12px;
-  }
-  @media (max-width:420px){
-    .options{grid-template-columns:1fr;}
-  }
-  .opt{
-    background:rgba(255,255,255,0.06);
-    border:1.5px solid rgba(255,255,255,0.14);
-    color:var(--ink);
-    padding:14px 12px;
-    border-radius:12px;
-    font-size:15px;
-    font-weight:600;
-    font-family:inherit;
-    cursor:pointer;
-    transition:transform .15s ease, background .2s ease, border-color .2s ease;
-  }
-  .opt:hover{
-    transform:translateY(-2px);
-    background:rgba(255,255,255,0.1);
-    border-color:var(--neon-soft);
-  }
-  .opt:disabled{cursor:default;}
-  .opt.wrong{
-    background:rgba(255,46,136,0.18);
-    border-color:var(--neon);
-    animation:shake .4s ease;
-  }
-  .opt.correct-glow{
-    border-color:var(--ok);
-    box-shadow:0 0 0 rgba(62,224,139,0.6);
-    animation:pulse 1s ease-in-out infinite;
-  }
-  .opt.correct-hit{
-    background:rgba(62,224,139,0.22);
-    border-color:var(--ok);
-  }
-  @keyframes shake{
-    0%,100%{transform:translateX(0);}
-    25%{transform:translateX(-6px);}
-    75%{transform:translateX(6px);}
-  }
-  @keyframes pulse{
-    0%,100%{box-shadow:0 0 0 rgba(62,224,139,0.5);}
-    50%{box-shadow:0 0 18px rgba(62,224,139,0.9);}
-  }
-  .feedback{
-    min-height:22px;
-    margin-top:16px;
-    font-size:14px;
-    font-weight:600;
-  }
-  .feedback.wrong-text{color:var(--neon-soft);}
-  .feedback.playing-text{color:var(--spot);}
+/* Concert mode: all effects are self-contained. */
+body{overflow-x:hidden;background:#080910;--acid:#d9ff76;--pink:#ff67c4;--cyan:#5be6ff}
+main{width:min(100%,880px);position:relative;z-index:2;padding-top:20px}
+.ambient{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.grid{position:absolute;inset:40% -80% -120%;background:linear-gradient(#d9ff761c 1px,transparent 1px),linear-gradient(90deg,#d9ff761c 1px,transparent 1px);background-size:65px 65px;transform:perspective(500px) rotateX(60deg);animation:gridTravel 8s linear infinite;mask-image:linear-gradient(transparent,#000)}
+.beam{position:absolute;top:-30vh;left:12%;width:24vw;min-width:180px;height:150vh;background:linear-gradient(#ff67c430,transparent);filter:blur(25px);transform-origin:top center;animation:sweep 11s ease-in-out infinite alternate;transform:rotate(-25deg)}
+.beam.b2{left:65%;background:linear-gradient(#5be6ff30,transparent);animation-delay:-6s;animation-direction:alternate-reverse}
+.orbit{position:absolute;width:65vw;height:65vw;min-width:500px;min-height:500px;border:1px solid #d9ff7622;border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%)}
+.orbit:after{content:'';position:absolute;inset:12%;border:1px dashed #ff67c444;border-radius:50%;animation:spin 60s linear infinite}
+.ticker{position:fixed;bottom:0;left:0;width:100%;overflow:hidden;background:#d9ff76;color:#101508;transform:rotate(-1deg) scale(1.02);z-index:3;pointer-events:none;padding:7px 0;font-weight:950;font-size:13px;letter-spacing:.12em;white-space:nowrap}.ticker-track{display:flex;width:max-content;animation:ticker 28s linear infinite}.ticker-track span{padding-right:35px}
+body{padding-bottom:65px}.card{position:relative;border-radius:8px 32px 8px 32px;border-color:#ffffff30;background:linear-gradient(130deg,#202130ee,#11111bee);box-shadow:12px 12px 0 #d9ff7612,0 30px 100px #0008;padding:clamp(22px,5vw,50px);transition:box-shadow .5s}
+.card:before{content:'';position:absolute;top:-2px;left:8%;width:32%;height:3px;background:var(--acid);box-shadow:0 0 25px #d9ff7677;animation:edge 5s ease-in-out infinite alternate}
+header{flex-wrap:wrap;margin-bottom:22px}.brand{font-size:15px}.tag{background:#d9ff7612}.motion{background:transparent;color:#b8b6c9;font-size:13px;border:1px solid #555466;border-radius:25px;padding:6px 12px}.header-right{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+h1{font-size:clamp(30px,5.5vw,52px);font-weight:950;max-width:760px}.word{display:inline-block;animation:wordEnter .65s cubic-bezier(.16,1,.3,1) both;animation-delay:calc(var(--i)*45ms)}
+.eyebrow{animation:slideIn .5s both}.options{grid-template-columns:1fr 1fr}.option{min-height:80px;border-radius:7px 17px 7px 17px;background:#ffffff06;transition:transform .22s,background .22s,box-shadow .22s;animation:optionEnter .55s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i)*85ms + 180ms)}
+.option:not(:disabled):hover{transform:translateY(-4px) rotate(-1deg);box-shadow:5px 5px 0 #d9ff7630}.option.correct{animation:correctPop .5s both;box-shadow:0 0 35px #d9ff7633}.option.wrong{animation:shake .5s both}.letter{font-weight:900}.feedback{animation:slideIn .4s both}.primary{font-size:18px;position:relative;overflow:hidden;min-height:60px;box-shadow:5px 5px 0 #7b943c;transition:transform .2s}.primary:hover{transform:translateY(-3px)}.primary:after{content:'';position:absolute;inset:-70% auto -70% -70%;width:35%;background:#ffffff60;transform:rotate(25deg);animation:shine 4s ease-in-out infinite}
+.round{height:8px;transition:background .6s;position:relative;overflow:hidden}.round.active:after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,#fff9,transparent);animation:shine 3s infinite}
+.question-number{font-size:clamp(70px,12vw,130px);font-weight:950;line-height:1;color:#ffffff06;position:absolute;right:22px;top:0;pointer-events:none;font-style:italic}.sound{animation:slideIn .4s both}.sound-top{flex-wrap:wrap}.mini-bars{display:flex;align-items:center;gap:4px;height:22px;margin-bottom:12px}.mini-bars i{width:4px;height:7px;background:var(--acid);animation:meter .6s ease-in-out infinite alternate;animation-delay:calc(var(--i)*-90ms)}body:not(.is-playing) .bars i,body:not(.is-playing) .mini-bars i{animation-play-state:paused}
+.stage{text-align:center;min-height:360px;display:flex;flex-direction:column;align-items:center;justify-content:center}.stage h1{width:100%}.stage-label{font-size:13px;letter-spacing:.22em;color:var(--pink);font-weight:900;text-transform:uppercase}.stage-copy{font-size:clamp(34px,8vw,80px);text-transform:uppercase;line-height:1.03;font-weight:1000}.stage-copy .accent{color:var(--acid)}.stage-copy .outline{-webkit-text-stroke:1px #f9f7ff;color:transparent}.slam{animation:slam .8s cubic-bezier(.16,1,.3,1) both}.stage-copy .word{animation-delay:calc(var(--i)*90ms)}.subline{font-size:16px;letter-spacing:.02em}.entry-badge{display:inline-block;padding:6px 14px;border:1px solid var(--pink);color:var(--pink);transform:rotate(-5deg);font-size:13px;font-weight:900}
+.count-wrap{display:grid;place-items:center;width:min(260px,65vw);aspect-ratio:1;position:relative;margin:20px auto}.count-wrap:before,.count-wrap:after{content:'';position:absolute;inset:0;border:2px dashed #d9ff7677;border-radius:50%;animation:spin 8s linear infinite}.count-wrap:after{inset:15px;border:2px solid transparent;border-top-color:var(--pink);animation-duration:2s}.big{font-size:clamp(100px,25vw,190px);font-weight:1000;animation:countHit 1s cubic-bezier(.16,1,.3,1) both;text-shadow:6px 6px 0 #ff67c466}
+.cinema .card{border-color:#d9ff7655;box-shadow:0 0 100px #d9ff7614}.cinema .beam{opacity:1;animation-duration:5s}.vinyl{height:180px;width:180px;border-radius:50%;margin:12px auto 24px;background:repeating-radial-gradient(circle,#20202b 0 2px,#0c0c13 3px 6px);display:grid;place-items:center;animation:spin 7s linear infinite;animation-play-state:paused;box-shadow:0 0 60px #ff67c422;border:1px solid #ffffff22}.vinyl span{width:70px;height:70px;display:grid;place-items:center;background:var(--acid);border-radius:50%;color:#101508;font-size:24px;font-weight:950}.is-playing .vinyl{animation-play-state:running}
+#fx{position:fixed;inset:0;width:100%;height:100%;z-index:5;pointer-events:none}.note{padding-bottom:8px}audio{color-scheme:dark}
+@keyframes wordEnter{from{opacity:0;transform:translateY(28px) rotate(5deg);filter:blur(9px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes optionEnter{from{opacity:0;transform:translateY(24px) scale(.95)}to{opacity:1;transform:none}}
+@keyframes slideIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes correctPop{0%{transform:scale(.97)}55%{transform:scale(1.035)}100%{transform:scale(1)}}
+@keyframes shake{20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}100%{transform:none}}
+@keyframes slam{from{opacity:0;transform:scale(1.2) translateY(-15px);filter:blur(12px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes countHit{from{opacity:0;transform:scale(1.6) rotate(-12deg)}25%,80%{opacity:1;transform:scale(1) rotate(0)}to{opacity:0;transform:scale(.8)}}
+@keyframes spin{to{transform:rotate(360deg)}}@keyframes ticker{to{transform:translateX(-50%)}}@keyframes sweep{to{transform:rotate(30deg)}}@keyframes edge{to{left:60%;width:20%}}@keyframes meter{to{height:22px}}@keyframes shine{0%,60%{left:-70%;transform:translateX(0) rotate(25deg)}100%{left:150%;transform:translateX(180%) rotate(25deg)}}@keyframes gridTravel{to{background-position:0 65px}} 
+body.reduced *,body.reduced *:before,body.reduced *:after{animation:none!important;transition:none!important}body.reduced .word{opacity:1}body.reduced #fx{display:none}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+@media(max-width:560px){.options{grid-template-columns:1fr}.option{min-height:65px;padding:13px}.stage{min-height:320px}.brand{font-size:13px}.header-right{gap:6px}.motion,.tag{font-size:12px}.card{box-shadow:6px 6px 0 #d9ff7612}.stage-copy{font-size:clamp(32px,9vw,50px)}}
 
-  .audio-row{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:10px;
-    margin-top:18px;
-    color:var(--ink-dim);
-    font-size:13px;
-  }
-  .bars{
-    display:flex;
-    align-items:flex-end;
-    gap:3px;
-    height:16px;
-  }
-  .bars span{
-    width:3px;
-    background:var(--spot);
-    border-radius:2px;
-    animation:bar 0.9s ease-in-out infinite;
-  }
-  .bars span:nth-child(1){height:6px;animation-delay:0s;}
-  .bars span:nth-child(2){height:14px;animation-delay:0.15s;}
-  .bars span:nth-child(3){height:9px;animation-delay:0.3s;}
-  .bars span:nth-child(4){height:16px;animation-delay:0.45s;}
-  @keyframes bar{
-    0%,100%{transform:scaleY(0.4);}
-    50%{transform:scaleY(1);}
-  }
-  .hidden{display:none !important;}
-
-  /* Intro */
-  .intro-emoji{font-size:48px;margin-bottom:12px;}
-  .btn-main{
-    margin-top:24px;
-    background:linear-gradient(135deg, var(--neon), #ff8a3d);
-    color:#1a0a10;
-    border:none;
-    padding:14px 32px;
-    border-radius:999px;
-    font-family:'Bungee', cursive;
-    font-size:16px;
-    letter-spacing:0.5px;
-    cursor:pointer;
-    box-shadow:0 8px 24px rgba(255,46,136,0.35);
-    transition:transform .15s ease;
-  }
-  .btn-main:hover{transform:translateY(-2px) scale(1.02);}
-
-  /* Countdown */
-  .countdown-num{
-    font-family:'Bungee', cursive;
-    font-size:96px;
-    color:var(--spot);
-    text-shadow:0 0 30px rgba(255,183,3,0.6);
-  }
-
-  /* Reveal */
-  .reveal-tag{
-    color:var(--neon-soft);
-    font-weight:800;
-    font-size:14px;
-    letter-spacing:1px;
-    margin-bottom:8px;
-  }
-  .reveal-name{
-    font-family:'Bungee', cursive;
-    font-size:clamp(34px,8vw,54px);
-    color:var(--spot);
-    text-shadow:0 0 24px rgba(255,183,3,0.6);
-    margin:6px 0 4px;
-  }
-  .reveal-sub{
-    color:var(--ink-dim);
-    font-size:14px;
-    margin-bottom:22px;
-  }
-  .mic{font-size:44px;margin-bottom:6px;}
-
-  .final-card{
-    padding-top:36px;
-    padding-bottom:36px;
-  }
-  .credits{
-    margin-top:28px;
-    font-size:12px;
-    color:var(--ink-dim);
-    opacity:0.75;
-  }
-
-  .confetti{
-    position:fixed;
-    top:-10px;
-    width:8px;height:14px;
-    opacity:0.9;
-    animation:fall linear forwards;
-    z-index:5;
-  }
-  @keyframes fall{
-    to{transform:translateY(110vh) rotate(360deg);}
-  }
 </style>
 </head>
 <body>
-
-<div class="stage">
-
-  <!-- INTRO SCREEN -->
-  <div id="screen-intro">
-    <h1 class="title">🎤 THE ULTIMATE CHALLENGE 🎤</h1>
-    <p class="subtitle">6 questions stand between you and greatness. Answer them all... if you dare.</p>
-    <div class="card">
-      <div class="intro-emoji">🏆</div>
-      <div class="question">Complete every challenge to unlock something legendary.</div>
-      <button class="btn-main" onclick="startQuiz()">START</button>
+<div class="ambient" aria-hidden="true"><div class="grid"></div><div class="beam"></div><div class="beam b2"></div><div class="orbit"></div></div>
+<canvas id="fx" aria-hidden="true"></canvas>
+<div class="ticker" aria-hidden="true"><div class="ticker-track"><span>MAJJA NANBARGAL ✦ CHENNAI TO THE WORLD ✦ SIX FRIENDS. ONE LEGEND. ✦ RADHIMAA WORLD PREMIERE ✦</span><span>MAJJA NANBARGAL ✦ CHENNAI TO THE WORLD ✦ SIX FRIENDS. ONE LEGEND. ✦ RADHIMAA WORLD PREMIERE ✦</span></div></div>
+<main>
+  <header><span class="brand">MAJJA NANBARGAL</span><div class="header-right"><span class="tag">6 friends. 1 legend.</span><button class="motion" id="motion" aria-pressed="false">Motion: on</button></div></header>
+  <div class="rounds" aria-hidden="true"><div class="round"></div><div class="round"></div><div class="round"></div></div>
+  <section class="card">
+    <div id="screen"></div>
+    <div class="sound" id="sound" hidden>
+      <div class="mini-bars" aria-hidden="true"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i><i style="--i:6"></i><i style="--i:7"></i><i style="--i:8"></i><i style="--i:9"></i><i style="--i:10"></i><i style="--i:11"></i><i style="--i:12"></i><i style="--i:13"></i><i style="--i:14"></i><i style="--i:15"></i><i style="--i:16"></i><i style="--i:17"></i></div><div class="sound-top"><p id="soundStatus" role="status">Loading audio…</p><button class="secondary" id="toggle" type="button">Pause</button></div>
+      <progress id="progress" value="0" max="1" aria-label="Audio playback progress"></progress>
+      <p id="time">0:00 / --:--</p>
     </div>
-  </div>
-
-  <!-- QUIZ SCREEN -->
-  <div id="screen-quiz" class="hidden">
-    <h1 class="title">🎤 THE ULTIMATE CHALLENGE 🎤</h1>
-    <div class="card">
-      <div class="progress" id="progress"></div>
-      <div class="qnum" id="qnum">QUESTION 1 / 6</div>
-      <div class="question" id="qtext"></div>
-      <div class="options" id="options"></div>
-      <div class="feedback" id="feedback"></div>
-      <div class="audio-row hidden" id="audioRow">
-        <div class="bars"><span></span><span></span><span></span><span></span></div>
-        <span>playing audio, hang tight...</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- COUNTDOWN SCREEN -->
-  <div id="screen-countdown" class="hidden">
-    <div class="card">
-      <div class="question">Okayyyy you got all correct 🔥<br>Ready to witness the greatest?</div>
-      <div class="countdown-num" id="countNum">3</div>
-    </div>
-  </div>
-
-  <!-- REVEAL SCREEN -->
-  <div id="screen-reveal" class="hidden">
-    <div class="card final-card">
-      <div class="mic">🎙️</div>
-      <div class="reveal-tag">GENERATIONAL TALENT · CHENNAI TO THE WORLD</div>
-      <div class="reveal-name">LEGEND JABESH</div>
-      <div class="reveal-sub" id="revealStatus">entering the stage...</div>
-      <div class="audio-row" id="revealAudioRow">
-        <div class="bars"><span></span><span></span><span></span><span></span></div>
-        <span id="revealAudioLabel">playing entry...</span>
-      </div>
-      <div class="credits">🎉 majja nanbargal — six members strong 🎉</div>
-    </div>
-  </div>
-
-</div>
-
-<audio id="player"></audio>
-
+  </section>
+  <p class="note">Headphones on. Friendship at your own risk. 🎧</p>
+</main>
 <script>
-const questions = [
-  {
-    q: "Who is the best singer in the entire world?",
-    options: ["AR Rahman", "Sai Abhyankkar", "Sid Sriram", "Legend Jabesh"],
-    correct: 3,
-    audio: "https://jaison.itsjabesh.com/legend_jabesh.mp3"
-  },
-  {
-    q: "What name does Jhana Varshan love the most?",
-    options: ["Gopika", "Deepika", "Vamsika", "Madhavan"],
-    correct: 3,
-    audio: "https://jaison.itsjabesh.com/jhana.mp3"
-  },
-  {
-    q: "Who respects girls the most?",
-    options: ["Jhana Varshan", "Hrithick", "Hitesh", "Rald Mama"],
-    correct: 3,
-    audio: "https://jaison.itsjabesh.com/heraled.mp3"
-  },
-  {
-    q: "Who dresses up at night and comes to college in the morning?",
-    options: ["Vijay", "Ajith", "Surya", "Hrithick"],
-    correct: 3,
-    audio: "https://jaison.itsjabesh.com/hrithick.mp3"
-  },
-  {
-    q: "Who has the best physique?",
-    options: ["Arnold", "Ronnie Coleman", "David Laid", "Hitesh Mama"],
-    correct: 3,
-    audio: "https://jaison.itsjabesh.com/hitesh.mp3"
-  },
-  {
-    q: "Who shares water the most?",
-    options: ["Nivedha", "Ushra", "Harishmita", "Jeyesh Palani Mama"],
-    correct: 3,
-    audio: "https://jaison.itsjabesh.com/jeyesh.mp3"
-  }
+const BASE='https://jaison.itsjabesh.com/';
+// Three challenges, two questions each. Correct answers are zero-indexed.
+const questions=[
+ {q:'Who is the best singer in the entire world?',a:['AR Rahman','Sai Abhyankkar','Sid Sriram','Legend Jabesh'],correct:3,clip:'legend_jabesh.mp3'},
+ {q:'What name does Jhana Varshan love the most?',a:['Gopika','Deepika','Vamsika','Madhavan'],correct:3,clip:'jhana.mp3'},
+ {q:'Who respects girls the most?',a:['Jhana Varshan','Hrithick','Hitesh','Rald Mama'],correct:3,clip:'heraled.mp3'},
+ {q:'Who dresses up at night and comes to college in the morning?',a:['Vijay','Ajith','Surya','Hrithick'],correct:3,clip:'hrithick.mp3'},
+ {q:'Who has the best physique?',a:['Arnold','Ronnie Coleman','David Laid','Hitesh Mama'],correct:3,clip:'hitesh.mp3'},
+ {q:'Who shares water the most?',a:['Nivedha','Ushra','Harishmita','Jeyesh Palani Mama'],correct:3,clip:'jeyesh.mp3'}
 ];
-
-const ENTRY_AUDIO = "https://jaison.itsjabesh.com/jabesh_entry.mp3";
-const FINAL_SONG = "https://jaison.itsjabesh.com/radhima.mp3";
-
-let current = 0;
-let locked = false;
-const player = document.getElementById('player');
-
-function startQuiz(){
-  document.getElementById('screen-intro').classList.add('hidden');
-  document.getElementById('screen-quiz').classList.remove('hidden');
-  buildProgress();
-  renderQuestion();
+const screen=document.getElementById('screen'),sound=document.getElementById('sound');
+const statusText=document.getElementById('soundStatus'),toggle=document.getElementById('toggle');
+const progress=document.getElementById('progress'),time=document.getElementById('time');
+const audio=new Audio();audio.preload='auto';
+let index=0,locked=false,afterAudio=null,clipLabel='',playAttempt=0;
+const fmt=n=>Number.isFinite(n)?Math.floor(n/60)+':'+String(Math.floor(n%60)).padStart(2,'0'):'--:--';
+const motionButton=document.getElementById('motion');
+const reducedQuery=matchMedia('(prefers-reduced-motion: reduce)');
+let reduced=reducedQuery.matches;
+function setMotion(){document.body.classList.toggle('reduced',reduced);motionButton.textContent=reduced?'Motion: reduced':'Motion: on';motionButton.setAttribute('aria-pressed',String(reduced));}
+setMotion();motionButton.onclick=()=>{reduced=!reduced;setMotion();};
+reducedQuery.addEventListener('change',event=>{reduced=event.matches;setMotion();});
+function animateWords(el){
+ if(!el)return;const words=el.textContent.split(/\s+/);el.textContent='';
+ words.forEach((word,i)=>{const span=document.createElement('span');span.className='word';span.style.setProperty('--i',i);span.textContent=word;el.append(span,document.createTextNode(' '));});
 }
-
-function buildProgress(){
-  const wrap = document.getElementById('progress');
-  wrap.innerHTML = '';
-  for(let i=0;i<questions.length;i++){
-    const d = document.createElement('div');
-    d.className = 'dot';
-    d.id = 'dot'+i;
-    wrap.appendChild(d);
-  }
+function focusHeading(){const h=screen.querySelector('h1');animateWords(h);h?.focus({preventScroll:true});}
+const canvas=document.getElementById('fx'),ctx=canvas.getContext('2d');
+let pieces=[],frame=0;
+function burst(){
+ if(reduced||!ctx)return;
+ canvas.width=innerWidth;canvas.height=innerHeight;
+ pieces=Array.from({length:85},()=>({x:innerWidth/2,y:innerHeight*.45,vx:(Math.random()-.5)*18,vy:-Math.random()*15-3,r:Math.random()*6+3,a:Math.random()*6,c:['#d9ff76','#ff67c4','#5be6ff','#ffffff'][Math.floor(Math.random()*4)]}));
+ if(!frame)frame=requestAnimationFrame(drawConfetti);
 }
-
-function updateProgress(){
-  for(let i=0;i<questions.length;i++){
-    const d = document.getElementById('dot'+i);
-    d.className = 'dot' + (i<current ? ' done' : i===current ? ' active' : '');
-  }
+function drawConfetti(){
+ ctx.clearRect(0,0,canvas.width,canvas.height);
+ if(reduced)pieces=[];
+ pieces.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.22;p.a+=.08;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.a);ctx.fillStyle=p.c;ctx.fillRect(-p.r/2,-p.r/2,p.r,p.r*.5);ctx.restore();});
+ pieces=pieces.filter(p=>p.y<canvas.height+30);frame=pieces.length?requestAnimationFrame(drawConfetti):0;
 }
 
 function renderQuestion(){
-  locked = false;
-  updateProgress();
-  const item = questions[current];
-  document.getElementById('qnum').textContent = `QUESTION ${current+1} / ${questions.length}`;
-  document.getElementById('qtext').textContent = item.q;
-  document.getElementById('feedback').textContent = '';
-  document.getElementById('feedback').className = 'feedback';
-  document.getElementById('audioRow').classList.add('hidden');
-
-  const optWrap = document.getElementById('options');
-  optWrap.innerHTML = '';
-  item.options.forEach((opt, idx) => {
-    const btn = document.createElement('button');
-    btn.className = 'opt';
-    btn.textContent = opt;
-    btn.onclick = () => handleAnswer(idx, btn);
-    optWrap.appendChild(btn);
-  });
+ locked=false;sound.hidden=true;document.body.classList.remove('is-playing');
+ document.querySelectorAll('.round').forEach((el,i)=>el.classList.toggle('active',i<=Math.floor(index/2)));
+ const item=questions[index];
+ screen.innerHTML='<div class="eyebrow">Challenge '+(Math.floor(index/2)+1)+' / 3 · Question '+(index+1)+' / 6</div><h1 tabindex="-1"></h1><div class="options"></div><p class="feedback" role="status">Correct answer = exclusive audio unlocked.</p>';
+ screen.querySelector('h1').textContent=item.q;
+ const number=document.createElement('div');number.className='question-number';number.setAttribute('aria-hidden','true');number.textContent=String(index+1).padStart(2,'0');screen.prepend(number);
+ item.a.forEach((answer,i)=>{
+  const btn=document.createElement('button');btn.type='button';btn.className='option';btn.style.setProperty('--i',i);
+  const letter=document.createElement('span');letter.className='letter';letter.textContent='ABCD'[i];
+  const label=document.createElement('span');label.textContent=answer;btn.append(letter,label);
+  btn.onclick=()=>choose(i);screen.querySelector('.options').append(btn);
+ });focusHeading();
 }
-
-function handleAnswer(idx, btn){
-  if(locked) return;
-  const item = questions[current];
-
-  if(idx === item.correct){
-    locked = true;
-    btn.classList.add('correct-hit');
-    document.querySelectorAll('.opt').forEach(b => b.disabled = true);
-    const fb = document.getElementById('feedback');
-    fb.textContent = "Correct! 🎉";
-    fb.className = 'feedback playing-text';
-    document.getElementById('audioRow').classList.remove('hidden');
-    playAudioThenAdvance(item.audio);
-  } else {
-    btn.classList.add('wrong');
-    btn.disabled = true;
-    const fb = document.getElementById('feedback');
-    fb.textContent = "Nope, that's not it — try the glowing one 👀";
-    fb.className = 'feedback wrong-text';
-    // glow the correct one so they can proceed
-    const allOpts = document.querySelectorAll('.opt');
-    allOpts[item.correct].classList.add('correct-glow');
-  }
+function choose(choice){
+ if(locked)return;
+ const item=questions[index],buttons=[...screen.querySelectorAll('.option')],feedback=screen.querySelector('.feedback');
+ if(choice!==item.correct){
+  buttons[choice].classList.add('wrong');buttons[item.correct].classList.add('correct');
+  buttons.forEach((b,i)=>b.disabled=i!==item.correct);
+  feedback.textContent='Aiyooo! The answer is '+item.a[item.correct]+'. Tap it to unlock the audio 😂';
+  buttons[item.correct].focus();return;
+ }
+ burst();locked=true;buttons.forEach(b=>b.disabled=true);buttons[choice].classList.add('correct');
+ feedback.textContent='Correct! Listen fully… next question unlocks after the audio. 🔊';
+ playClip(item.clip,item.a[item.correct],()=>{index++;index<questions.length?renderQuestion():ready();});
 }
-
-function playAudioThenAdvance(src){
-  player.pause();
-  player.src = src;
-  player.currentTime = 0;
-  player.play().catch(()=>{});
-  player.onended = () => {
-    document.getElementById('audioRow').classList.add('hidden');
-    current++;
-    if(current < questions.length){
-      renderQuestion();
-    } else {
-      finishQuiz();
-    }
-  };
+async function attemptPlay(){
+ const attempt=++playAttempt;
+ try{await audio.play();}
+ catch(error){
+  if(attempt!==playAttempt)return;
+  statusText.textContent=error.name==='NotAllowedError'?'Tap Play to continue the audio.':'Audio could not load. Check your connection and tap Retry.';
+  toggle.textContent=error.name==='NotAllowedError'?'Play':'Retry';
+ }
 }
-
-function finishQuiz(){
-  updateProgress();
-  document.getElementById('screen-quiz').classList.add('hidden');
-  document.getElementById('screen-countdown').classList.remove('hidden');
-  runCountdown();
+function playClip(file,label,onComplete){
+ audio.pause();clipLabel=label;afterAudio=onComplete;
+ sound.hidden=false;progress.value=0;time.textContent='0:00 / --:--';
+ statusText.textContent='Loading '+label+'…';toggle.textContent='Play';
+ audio.src=BASE+file;audio.load();attemptPlay();
 }
-
-function runCountdown(){
-  const seq = ["3","2","1","🎤"];
-  let i = 0;
-  const el = document.getElementById('countNum');
-  el.textContent = seq[i];
-  const timer = setInterval(() => {
-    i++;
-    if(i < seq.length){
-      el.textContent = seq[i];
-    } else {
-      clearInterval(timer);
-      showReveal();
-    }
-  }, 900);
+toggle.onclick=()=>{
+ if(audio.error){audio.load();attemptPlay();}
+ else if(audio.paused)attemptPlay();else audio.pause();
+};
+audio.addEventListener('playing',()=>{document.body.classList.add('is-playing');statusText.textContent='Now playing: '+clipLabel;toggle.textContent='Pause';});
+audio.addEventListener('pause',()=>{document.body.classList.remove('is-playing');if(!audio.ended){statusText.textContent='Paused — finish listening to continue.';toggle.textContent='Resume';}});
+audio.addEventListener('waiting',()=>{document.body.classList.remove('is-playing');statusText.textContent='Buffering… your progress is safe.';});
+audio.addEventListener('error',()=>{statusText.textContent='Audio unavailable. Check your connection and tap Retry.';toggle.textContent='Retry';});
+audio.addEventListener('timeupdate',()=>{
+ progress.value=Number.isFinite(audio.duration)&&audio.duration>0?audio.currentTime/audio.duration:0;
+ time.textContent=fmt(audio.currentTime)+' / '+fmt(audio.duration);
+});
+// Only a completed clip advances the quiz. There is no seek or skip control.
+audio.addEventListener('ended',()=>{document.body.classList.remove('is-playing');const done=afterAudio;afterAudio=null;sound.hidden=true;if(done)done();});
+function ready(){
+ document.body.classList.add('cinema');burst();
+ screen.innerHTML='<div class="stage"><div class="entry-badge">ALL 3 CHALLENGES COMPLETE</div><h1 class="stage-copy" tabindex="-1">Okayyyyy! All correct.</h1><p class="subline">Ready to witness the greatesttt?</p><button class="primary" id="ready">ARE YOU READYYY? 🔥</button></div>';
+ document.getElementById('ready').onclick=countdown;focusHeading();
 }
-
-function showReveal(){
-  document.getElementById('screen-countdown').classList.add('hidden');
-  document.getElementById('screen-reveal').classList.remove('hidden');
-  launchConfetti();
-
-  const status = document.getElementById('revealStatus');
-  const label = document.getElementById('revealAudioLabel');
-  status.textContent = "entering the stage...";
-  label.textContent = "playing entry...";
-
-  player.pause();
-  player.src = ENTRY_AUDIO;
-  player.currentTime = 0;
-  player.play().catch(()=>{});
-  player.onended = () => {
-    status.textContent = "and now, the full performance 🎶";
-    label.textContent = "now playing: Radhimaa";
-    player.src = FINAL_SONG;
-    player.currentTime = 0;
-    player.play().catch(()=>{});
-    player.onended = () => {
-      label.textContent = "hope you enjoyed the show 🙏";
-    };
-  };
+function countdown(){
+ let count=3;
+ screen.innerHTML='<div class="stage"><div class="stage-label">Turn the volume up</div><h1 tabindex="-1">Are you readdyyy?</h1><div class="count-wrap"><div class="big" role="status" id="count">3</div></div></div>';focusHeading();
+ const timer=setInterval(()=>{count--;if(count>0){const old=document.getElementById('count'),next=old.cloneNode();next.textContent=count;old.replaceWith(next);}else{clearInterval(timer);entry();}},1000);
 }
-
-function launchConfetti(){
-  const colors = ['#ffb703','#ff2e88','#3ee08b','#ff8a3d','#f4eefc'];
-  for(let i=0;i<60;i++){
-    const c = document.createElement('div');
-    c.className = 'confetti';
-    c.style.left = Math.random()*100 + 'vw';
-    c.style.background = colors[Math.floor(Math.random()*colors.length)];
-    c.style.animationDuration = (2.5 + Math.random()*2) + 's';
-    c.style.animationDelay = (Math.random()*1.5) + 's';
-    document.body.appendChild(c);
-    setTimeout(()=>c.remove(), 5000);
-  }
+let entryCue=-1,entryActive=false;
+const cues=[
+ ['ONE OF THE FINEST','SINGERS','IN THIS GENERATION'],
+ ['A GENERATIONAL','TALENT','NO INTRODUCTION NEEDED. BUT STILL…'],
+ ['FROM CHENNAI','TO THE WORLD','MAJJA NANBARGAL PRESENTS'],
+ ['INTRODUCING','LEGEND JABESHHH','THE VOICE. THE VIBE. THE LEGEND.']
+];
+function showCue(n){
+ if(n===entryCue)return;entryCue=n;const [top,title,sub]=cues[n];
+ const stage=document.getElementById('entryStage');if(!stage)return;
+ stage.innerHTML='<div class="stage-label"></div><h1 class="stage-copy slam" tabindex="-1"></h1><div class="entry-badge"></div><div class="bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>';
+ stage.querySelector('.stage-label').textContent=top;stage.querySelector('h1').textContent=title;stage.querySelector('.entry-badge').textContent=sub;
+ animateWords(stage.querySelector('h1'));if(n===3)burst();
 }
+function entry(){
+ entryActive=true;entryCue=-1;
+ screen.innerHTML='<div class="stage" id="entryStage" aria-live="polite"></div>';
+ showCue(0);screen.querySelector('h1').focus({preventScroll:true});
+ playClip('jabesh_entry.mp3','Legend Jabesh — the entry',()=>{entryActive=false;finalSong();});
+}
+// Title cards follow entry-clip progress and stop advancing when audio pauses.
+// These are visual cues, not a word-for-word transcript of the supplied audio.
+audio.addEventListener('timeupdate',()=>{
+ if(entryActive&&Number.isFinite(audio.duration)&&audio.duration>0)showCue(Math.min(3,Math.floor(audio.currentTime/audio.duration*4)));
+});
+function finalSong(){
+ document.body.classList.remove('is-playing');burst();
+ screen.innerHTML='<div class="eyebrow">The world premiere</div><h1 class="stage-copy" tabindex="-1">Radhimaa. Legend edition.</h1><div class="vinyl" aria-hidden="true"><span>LJ</span></div><p>From Chennai to the world.<br>Majja Nanbargal, this one is for you. ❤️</p><audio id="final" controls preload="auto"></audio><p id="finalStatus" role="status"></p><button class="primary" id="finalPlay" hidden>Play Radhimaa ▶</button>';
+ focusHeading();const song=document.getElementById('final'),btn=document.getElementById('finalPlay'),msg=document.getElementById('finalStatus');
+ song.src=BASE+'radhima.mp3';
+ const play=()=>song.play().catch(()=>{btn.hidden=false;msg.textContent='Tap Play Radhimaa to start. If it fails, check your connection and retry.';});
+ btn.onclick=()=>{if(song.error)song.load();play();};
+ song.onplaying=()=>{document.body.classList.add('is-playing');btn.hidden=true;msg.textContent='Now playing — Legend Jabesh 🎤';};
+ song.onerror=()=>{btn.hidden=false;msg.textContent='Song could not load. Check your connection and retry.';};
+ song.onpause=()=>document.body.classList.remove('is-playing');
+ song.onwaiting=()=>document.body.classList.remove('is-playing');
+ song.onended=()=>{document.body.classList.remove('is-playing');msg.textContent='Talent witnessed. Friendship tested. 😂 Replay anytime.';};play();
+}
+renderQuestion();
 </script>
-
 </body>
 </html>
